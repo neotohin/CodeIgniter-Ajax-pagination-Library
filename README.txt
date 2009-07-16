@@ -20,6 +20,3 @@ Don't forget to use : $this->jquery_pagination->  instead of $this->pagination
 
 Original Post Link : http://tohin.wordpress.com/2008/08/12/codeigniter-ajax-pagination/
 Example Post Link : http://tohin.wordpress.com/2008/10/07/codeigniter-ajax-pagination-exampleguideline/
-
-
-Edited from Eclipse Galelio :)
