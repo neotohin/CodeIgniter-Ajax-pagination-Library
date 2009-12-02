@@ -117,7 +117,8 @@ class Jquery_pagination{
 		// Is there only one page? Hm... nothing more to do here then.
 		if ($num_pages == 1)
 		{
-			return '';
+            $info = 'Showing : ' . $this->total_rows;
+			return $info;
 		}
 
 		// Determine the current page number.		
@@ -162,6 +163,21 @@ class Jquery_pagination{
 
   		// And here we go...
 		$output = '';
+
+        // SHOWING LINKS
+
+        $curr_offset = $CI->uri->segment($this->uri_segment);
+        $info = 'Showing ' . ( $curr_offset + 1 ) . ' to ' ;
+
+        if( ( $curr_offset + $this->per_page ) < ( $this->total_rows -1 ) )
+            $info .= $curr_offset + $this->per_page;
+        else
+            $info .= $this->total_rows;
+
+        $info .= ' of ' . $this->total_rows . ' | ';
+
+        $output .= $info;
+
 
 		// Render the "First" link
 		if  ($this->cur_page > $this->num_links)
@@ -228,6 +244,10 @@ class Jquery_pagination{
 	}
 
 	function getAJAXlink( $count, $text) {
+
+        if( $this->div == '')
+            return '<a href="'. $this->base_url . $count . '">'. $text .'</a>';
+
 		return "<a href=\"#\" 
 					onclick=\"$.post('". $this->base_url . $count ."', {'t' : 't'}, function(data){
 					$('". $this->div . "').html(data);" . $this->js_rebind ."; }); return false;\">"
