@@ -50,11 +50,12 @@ class Jquery_pagination{
 	var $prev_tag_close		= '';
 	var $num_tag_open		= '&nbsp;';
 	var $num_tag_close		= '';
-	var $js_rebind 			= '';
 	
 	// Added By Tohin
+	var $js_rebind 			= '';
 	var $div                = '';
-	var $postVar             = '';
+	var $postVar            = '';
+    var $additional_param	= '';
 
 	/**
 	 * Constructor
@@ -247,9 +248,12 @@ class Jquery_pagination{
 
         if( $this->div == '')
             return '<a href="'. $this->base_url . $count . '">'. $text .'</a>';
+            
+        if( $this->additional_param == '' )
+        	$this->additional_param = "{'t' : 't'}";
 
 		return "<a href=\"#\" 
-					onclick=\"$.post('". $this->base_url . $count ."', {'t' : 't'}, function(data){
+					onclick=\"$.post('". $this->base_url . $count ."', ". $this->additional_param .", function(data){
 					$('". $this->div . "').html(data);" . $this->js_rebind ."; }); return false;\">"
 				. $text .'</a>';
 	}
