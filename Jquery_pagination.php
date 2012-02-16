@@ -56,6 +56,10 @@ class Jquery_pagination{
 	var $div                = '';
 	var $postVar            = '';
     var $additional_param	= '';
+    
+   // Added by Sean
+   var $anchor_class		= '';
+   var $show_count      = true;
 
 	/**
 	 * Constructor
@@ -93,6 +97,12 @@ class Jquery_pagination{
 					$this->$key = $val;
 				}
 			}		
+		}
+		
+		// Apply class tag using anchor_class variable, if set.
+		if ($this->anchor_class != '')
+		{
+			$this->anchor_class = 'class="' . $this->anchor_class . '" ';
 		}
 	}
 	
@@ -165,20 +175,21 @@ class Jquery_pagination{
   		// And here we go...
 		$output = '';
 
-        // SHOWING LINKS
+      // SHOWING LINKS
+      if ($this->show_count)
+      {
+         $curr_offset = $CI->uri->segment($this->uri_segment);
+         $info = 'Showing ' . ( $curr_offset + 1 ) . ' to ' ;
 
-        $curr_offset = $CI->uri->segment($this->uri_segment);
-        $info = 'Showing ' . ( $curr_offset + 1 ) . ' to ' ;
-
-        if( ( $curr_offset + $this->per_page ) < ( $this->total_rows -1 ) )
+         if( ( $curr_offset + $this->per_page ) < ( $this->total_rows -1 ) )
             $info .= $curr_offset + $this->per_page;
-        else
+         else
             $info .= $this->total_rows;
 
-        $info .= ' of ' . $this->total_rows . ' | ';
+         $info .= ' of ' . $this->total_rows . ' | ';
 
-        $output .= $info;
-
+         $output .= $info;
+      }
 
 		// Render the "First" link
 		if  ($this->cur_page > $this->num_links)
@@ -247,12 +258,13 @@ class Jquery_pagination{
 	function getAJAXlink( $count, $text) {
 
         if( $this->div == '')
-            return '<a href="'. $this->base_url . $count . '">'. $text .'</a>';
+            return '<a href="'. $this->anchor_class . ' ' . $this->base_url . $count . '">'. $text .'</a>';
             
         if( $this->additional_param == '' )
         	$this->additional_param = "{'t' : 't'}";
 
-		return "<a href=\"#\" 
+		return "<a href=\"#\"
+		         " . $this->anchor_class . "
 					onclick=\"$.post('". $this->base_url . $count ."', ". $this->additional_param .", function(data){
 					$('". $this->div . "').html(data);" . $this->js_rebind ."; }); return false;\">"
 				. $text .'</a>';
